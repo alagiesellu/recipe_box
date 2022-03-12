@@ -1,26 +1,3 @@
-<script>
-import { postLogin } from "../services/AuthService";
-export default {
-    data() {
-        return {
-            input: {},
-        };
-    },
-    methods: {
-        submitForm: function (e) {
-            e.preventDefault();
-            if (this.input.email && this.input.email) {
-                postLogin(this.input.email, this.input.password).then(
-                    (response) => {
-                        localStorage.setItem("jwt", response);
-                    }
-                );
-            }
-        },
-    },
-};
-</script>
-
 <template>
     <main>
         <h1>Login</h1>
@@ -47,3 +24,26 @@ export default {
         </form>
     </main>
 </template>
+<script>
+import { postLogin } from "../services/ApiService";
+import { useAuthStore } from "../stores/auth";
+export default {
+    data() {
+        return {
+            input: {},
+        };
+    },
+    methods: {
+        submitForm: function (e) {
+            e.preventDefault();
+            if (this.input.email && this.input.email) {
+
+                postLogin(this.input).then((response) => {
+                    localStorage.setItem("jwt", response);
+                    this.$router.push({ name: "home" });
+                });
+            }
+        },
+    },
+};
+</script>

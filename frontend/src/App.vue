@@ -1,7 +1,6 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
 </script>
-
 <template>
     <header>
         <img
@@ -14,16 +13,50 @@ import { RouterLink, RouterView } from "vue-router";
 
         <div class="wrapper">
             <h1 class="green">Recipe Box</h1>
-            <nav>
+            <nav v-if="authStore.isAuthenticated">
+                <RouterLink :to="{ name: 'home' }">
+                    {{ authStore.auth.getName() }}
+                </RouterLink>
+                <RouterLink v-on:click="logout" :to="{ name: 'login' }">
+                    Logout
+                </RouterLink>
+            </nav>
+            <nav v-else>
                 <RouterLink :to="{ name: 'login' }">Login</RouterLink>
                 <RouterLink :to="{ name: 'register' }">Register</RouterLink>
             </nav>
         </div>
     </header>
-
+    <notifications position="top center" />
     <RouterView />
 </template>
-
+<script>
+import { getAuthUser, postLogout } from "./services/ApiService";
+import { useAuthStore } from "./stores/auth";
+export default {
+    data() {
+        return {
+            authStore: useAuthStore(),
+        };
+    },
+    watch: {
+        $route() {
+            getAuthUser().then((response) => {
+                this.authStore.loadAuth(response);
+            });
+        },
+    },
+    methods: {
+        logout: function () {
+            postLogout().then(() => {
+                localStorage.clear();
+                this.$router.push({ name: "login" });
+                this.authStore.resetAuth();
+            });
+        },
+    },
+};
+</script>
 <style>
 @import "@/assets/base.css";
 

@@ -18,7 +18,7 @@ function isAuthenticated(to, from) {
 // eslint-disable-next-line no-unused-vars
 function isUnauthenticated(to, from) {
     if (authStored()) {
-        return "home";
+        return "/";
     }
 }
 

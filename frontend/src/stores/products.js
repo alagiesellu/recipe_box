@@ -1,11 +1,11 @@
 import { defineStore } from "pinia";
 import Auth from "../models";
 
-export const useAuthStore = defineStore({
+export const useProductsStore = defineStore({
     id: "auth",
     state: () => ({
-        auth: null,
-        isAuthenticated: false,
+        products: {},
+        product: {},
     }),
     getters: {},
     actions: {
