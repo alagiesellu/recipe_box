@@ -18,7 +18,7 @@ class ProductController extends Controller
 
     public function index(): JsonResponse
     {
-        $products = Product::with('user')->paginate();
+        $products = Product::with('user')->get();
 
         return $this->sendResponse($products);
     }
