@@ -1,59 +1,19 @@
-version: "3.3"
+version: '3.2022'
 services:
-  laravel_backend:
-    container_name: laravel_backend
-    build:
-      args:
-        WWWGROUP: ${WWWGROUP}
-      context: ./docker
-      dockerfile: backend/Dockerfile
-    image: sail-8.1/app
-    extra_hosts:
-      - 'host.docker.internal:host-gateway'
-    ports:
-      - '8000:80'
-    environment:
-      WWWUSER: '${WWWUSER}'
-      LARAVEL_SAIL: 1
-      XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
-      XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
-    volumes:
-      - './back:/var/www/html'
-    networks:
-      - app_net
-
-  vuejs_frontend:
-    container_name: vuejs_frontend
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    restart: always
-    ports:
-      - "8080:80"
-    networks:
-      - app_net
-
   nginx_certbot:
-    container_name: nginx_certbot
     restart: always
     image: staticfloat/nginx-certbot
     ports:
-      - "80:80/tcp"
+      - "8088:80/tcp"
       - "443:443/tcp"
     environment:
       CERTBOT_EMAIL: ${CERTBOT_EMAIL}
       ENVSUBST_VARS: FQDN
       FQDN: ${CERTBOT_DOMAIN}
     volumes:
-      - ./docker/nginx/conf.d:/etc/nginx/user.conf.d:ro
+      - ./nginx/conf.d:/etc/nginx/user.conf.d:ro
+      - ./nginx/logs:/var/log/nginx
       - letsencrypt:/etc/letsencrypt
-      - ./storage/logs/nginx:/var/log/nginx
-    networks:
-      - app_net
 
 volumes:
   letsencrypt:
-
-networks:
-  app_net:
-    driver: bridge

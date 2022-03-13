@@ -1,7 +1,7 @@
 import axios from "axios";
 import { notify } from "@kyvg/vue3-notification";
 
-const API_PATH = "http://localhost:8000/api";
+const API_PATH = "/api";
 
 const axiosInstance = axios.create({
     baseURL: API_PATH,
