@@ -1,7 +1,32 @@
 import api from "./api";
 
 export async function getProducts() {
-    const response = await api.get("/products");
+    return await api
+        .get("/products")
+        .then((response) => {
+            localStorage.setItem(
+                "productsStore",
+                JSON.stringify(response.data)
+            );
+            return response.data;
+        })
+        .catch(() => {
+            return JSON.parse(localStorage.getItem("productsStore"));
+        });
+}
+
+export async function editProduct(id, inputs) {
+    const response = await api.patch("/products/" + id, inputs);
+    return response.data;
+}
+
+export async function deleteProduct(id) {
+    const response = await api.delete("/products/" + id);
+    return response.data;
+}
+
+export async function storeProduct(inputs) {
+    const response = await api.post("/products", inputs);
     return response.data;
 }
 

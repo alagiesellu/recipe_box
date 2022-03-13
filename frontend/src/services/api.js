@@ -33,11 +33,12 @@ axiosInstance.interceptors.response.use(
         return response;
     },
     (error) => {
-        if (error.response.status === 422)
-            notify({
-                type: "error",
-                text: loadErrors(error.response.data.errors) || "Error",
-            });
+        notify({
+            type: "error",
+            text:
+                loadErrors(error.response.data.errors) ||
+                error.response.statusText,
+        });
         return Promise.reject(error);
     }
 );

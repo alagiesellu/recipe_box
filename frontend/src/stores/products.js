@@ -5,7 +5,6 @@ export const useProductsStore = defineStore({
     id: "auth",
     state: () => ({
         products: {},
-        product: {},
     }),
     getters: {},
     actions: {

@@ -25,8 +25,8 @@ class StoreProductRequest extends FormRequest
     {
         return [
             'name' => 'required|unique:products',
-            'ingredients' => 'required|array',
-            'directions' => 'required|array',
+            'ingredients' => 'required',
+            'directions' => 'required',
         ];
     }
 }

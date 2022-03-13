@@ -2,33 +2,33 @@
 import { RouterLink, RouterView } from "vue-router";
 </script>
 <template>
-    <header>
-        <img
-            alt="Vue logo"
-            class="logo"
-            src="@/assets/logo.svg"
-            width="125"
-            height="125"
-        />
-
-        <div class="wrapper">
-            <h1 class="green">Recipe Box</h1>
-            <nav v-if="authStore.isAuthenticated">
-                <RouterLink :to="{ name: 'home' }">
-                    {{ authStore.auth.getName() }}
-                </RouterLink>
-                <RouterLink v-on:click="logout" :to="{ name: 'login' }">
-                    Logout
-                </RouterLink>
-            </nav>
-            <nav v-else>
-                <RouterLink :to="{ name: 'login' }">Login</RouterLink>
-                <RouterLink :to="{ name: 'register' }">Register</RouterLink>
-            </nav>
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <header class="col-md-8">
+                <h1 class="site-title">
+                    Recipe Box
+                </h1>
+            </header>
+            <div class="col-md-4">
+                <nav v-if="authStore.isAuthenticated">
+                    <RouterLink :to="{ name: 'home' }">
+                        {{ authStore.auth.getName() }}
+                    </RouterLink>
+                    <RouterLink v-on:click="logout" :to="{ name: 'login' }">
+                        Logout
+                    </RouterLink>
+                </nav>
+                <nav v-else>
+                    <RouterLink :to="{ name: 'home' }">Home</RouterLink>
+                    <RouterLink :to="{ name: 'login' }">Login</RouterLink>
+                    <RouterLink :to="{ name: 'register' }">Register</RouterLink>
+                </nav>
+            </div>
+            <RouterView class="col-md-12 my-4" />
+            <footer class="col-md-12">By <strong>@alagiesellu</strong></footer>
         </div>
-    </header>
+    </div>
     <notifications position="top center" />
-    <RouterView />
 </template>
 <script>
 import { getAuthUser, postLogout } from "./services/ApiService";
@@ -41,9 +41,14 @@ export default {
     },
     watch: {
         $route() {
-            getAuthUser().then((response) => {
-                this.authStore.loadAuth(response);
-            });
+            if (localStorage.getItem("jwt"))
+                getAuthUser()
+                    .then((response) => {
+                        this.authStore.loadAuth(response);
+                    })
+                    .catch(() => {
+                        localStorage.clear();
+                    });
         },
     },
     methods: {
@@ -59,98 +64,5 @@ export default {
 </script>
 <style>
 @import "@/assets/base.css";
-
-#app {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 2rem;
-
-    font-weight: normal;
-}
-
-header {
-    line-height: 1.5;
-    max-height: 100vh;
-}
-
-.logo {
-    display: block;
-    margin: 0 auto 2rem;
-}
-
-a,
-.green {
-    text-decoration: none;
-    color: hsla(160, 100%, 37%, 1);
-    transition: 0.4s;
-}
-
-@media (hover: hover) {
-    a:hover {
-        background-color: hsla(160, 100%, 37%, 0.2);
-    }
-}
-
-nav {
-    width: 100%;
-    font-size: 12px;
-    text-align: center;
-    margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-    color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-    background-color: transparent;
-}
-
-nav a {
-    display: inline-block;
-    padding: 0 1rem;
-    border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-    border: 0;
-}
-
-@media (min-width: 1024px) {
-    body {
-        display: flex;
-        place-items: center;
-    }
-
-    #app {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        padding: 0 2rem;
-    }
-
-    header {
-        display: flex;
-        place-items: center;
-        padding-right: calc(var(--section-gap) / 2);
-    }
-
-    header .wrapper {
-        display: flex;
-        place-items: flex-start;
-        flex-wrap: wrap;
-    }
-
-    .logo {
-        margin: 0 2rem 0 0;
-    }
-
-    nav {
-        text-align: left;
-        margin-left: -1rem;
-        font-size: 1rem;
-
-        padding: 1rem 0;
-        margin-top: 1rem;
-    }
-}
+@import "@/assets/custom.css";
 </style>

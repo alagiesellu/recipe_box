@@ -6,4 +6,7 @@ export default class Auth {
     getName() {
         return this.data.name;
     }
+    getId() {
+        return this.data.id;
+    }
 }

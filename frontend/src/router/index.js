@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import ProductView from "../views/ProductView.vue";
 import LoginView from "../views/LoginView.vue";
 import RegisterView from "../views/RegisterView.vue";
 
@@ -29,7 +28,6 @@ const router = createRouter({
             path: "/",
             name: "home",
             component: HomeView,
-            beforeEnter: isAuthenticated,
         },
         {
             path: "/login",
@@ -42,12 +40,6 @@ const router = createRouter({
             name: "register",
             component: RegisterView,
             beforeEnter: isUnauthenticated,
-        },
-        {
-            path: "/about",
-            name: "about",
-            component: ProductView,
-            beforeEnter: isAuthenticated,
         },
     ],
 });

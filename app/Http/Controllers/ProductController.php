@@ -13,12 +13,12 @@ class ProductController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:sanctum')->only(['user', 'logout']);
+        $this->middleware('auth:sanctum')->only(['store', 'update', 'destroy']);
     }
 
     public function index(): JsonResponse
     {
-        $products = Product::with('user')->get();
+        $products = Product::with('user')->orderBy('id', 'desc')->get();
 
         return $this->sendResponse($products);
     }
@@ -41,7 +41,7 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $request, Product $product): JsonResponse
     {
-        Gate::authorize('update', $product);
+        Gate::inspect('update', $product);
 
         $product->update($request->validated());
 
@@ -50,7 +50,7 @@ class ProductController extends Controller
 
     public function destroy(Product $product): JsonResponse
     {
-        Gate::authorize('delete', $product);
+        Gate::inspect('delete', $product);
 
         $response = $product->delete();
 
