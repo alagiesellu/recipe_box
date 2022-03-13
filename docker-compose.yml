@@ -1,12 +1,12 @@
 version: "3.3"
 services:
-  research_laravel:
-    container_name: research_laravel
+  laravel_backend:
+    container_name: laravel_backend
     build:
       args:
         WWWGROUP: ${WWWGROUP}
       context: ./docker
-      dockerfile: Dockerfile
+      dockerfile: backend/Dockerfile
     image: sail-8.1/app
     extra_hosts:
       - 'host.docker.internal:host-gateway'
@@ -18,23 +18,23 @@ services:
       XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
       XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
     volumes:
-      - '.:/var/www/html'
+      - './back:/var/www/html'
     networks:
-      - research_network
+      - app_net
 
-  research_vuejs:
-    container_name: research_vuejs
+  vuejs_frontend:
+    container_name: vuejs_frontend
     build:
-      context: ./utg_research_fe
+      context: ./frontend
       dockerfile: Dockerfile
     restart: always
     ports:
       - "8080:80"
     networks:
-      - research_network
+      - app_net
 
-  research_nginx_certbot:
-    container_name: research_nginx_certbot
+  nginx_certbot:
+    container_name: nginx_certbot
     restart: always
     image: staticfloat/nginx-certbot
     ports:
@@ -49,11 +49,11 @@ services:
       - letsencrypt:/etc/letsencrypt
       - ./storage/logs/nginx:/var/log/nginx
     networks:
-      - research_network
+      - app_net
 
 volumes:
   letsencrypt:
 
 networks:
-  research_network:
+  app_net:
     driver: bridge
