@@ -1,2 +1,4 @@
 /nginx/logs
+/storage/logs
 .env
+.idea
