@@ -1,5 +1,5 @@
 # Recipe Box Deployment
 
 To deploy app;
-- Make deploy.sh file executable.
+- Make up-docker.sh file executable.
 - And then execute it.
